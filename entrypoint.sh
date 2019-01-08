@@ -45,15 +45,19 @@ if [[ ! -z "${SSH_PRIVATE_KEY}" ]]; then
     ## you will overwrite your user's SSH config.
     ##
     # [[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-
+    
+    if [[ ! -z "${ANSIBLE_SSH_CONFIG}" ]]; then 
+        echo "$ANSIBLE_SSH_CONFIG" > ~/.ssh/config
+    else
+        echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    fi    
 fi
 
-if [[ ! -z "${ANSIBLE_VAULT_PASSWORD}"]]; then 
-    if [[ -z "${ANSIBLE_VAULT_PASSWORD_FILE}"]]; then 
+if [[ ! -z "${ANSIBLE_VAULT_PASSWORD}" ]]; then 
+    if [[ -z "${ANSIBLE_VAULT_PASSWORD_FILE}" ]]; then 
         export ANSIBLE_VAULT_PASSWORD_FILE=~/.vaultpass
     fi  
-    echo $ANSIBLE_VAULT_PASSWORD > $ANSIBLE_VAULT_PASSWORD_FILE
+    echo "$ANSIBLE_VAULT_PASSWORD" > $ANSIBLE_VAULT_PASSWORD_FILE
 fi
 
 case $1 in
