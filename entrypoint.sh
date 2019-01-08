@@ -49,6 +49,13 @@ if [[ ! -z "${SSH_PRIVATE_KEY}" ]]; then
 
 fi
 
+if [[ ! -z "${ANSIBLE_VAULT_PASSWORD}"]]; then 
+    if [[ -z "${ANSIBLE_VAULT_PASSWORD_FILE}"]]; then 
+        export ANSIBLE_VAULT_PASSWORD_FILE=~/.vaultpass
+    fi  
+    echo $ANSIBLE_VAULT_PASSWORD > $ANSIBLE_VAULT_PASSWORD_FILE
+fi
+
 case $1 in
     playbook)
         shift
