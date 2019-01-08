@@ -12,7 +12,7 @@ LABEL org.label-schema.vcs-ref=$VCS_REF \
 
 COPY requirements.pip /tmp/requirements.pip
 
-RUN apk add --no-cache python ca-certificates openssl git openssh-client && \
+RUN apk add --no-cache python ca-certificates openssl openssh-client && \
     apk add --no-cache --virtual .build-deps build-base python-dev libffi-dev openssl-dev && \
     python -m ensurepip && \
     rm -r /usr/lib/python*/ensurepip && \
@@ -24,4 +24,3 @@ RUN apk add --no-cache python ca-certificates openssl git openssh-client && \
 ENV SSH_PRIVATE_KEY ""
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
-# CMD [ "ansible-playbook" ]
