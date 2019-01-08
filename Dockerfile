@@ -12,12 +12,12 @@ LABEL org.label-schema.vcs-ref=$VCS_REF \
 
 COPY requirements.pip /tmp/requirements.pip
 
-RUN apk add --no-cache python3 ca-certificates openssl git openssh-client && \
-    apk add --no-cache --virtual .build-deps build-base python3-dev libffi-dev openssl-dev && \
-    python3 -m ensurepip && \
+RUN apk add --no-cache python ca-certificates openssl git openssh-client && \
+    apk add --no-cache --virtual .build-deps build-base python-dev libffi-dev openssl-dev && \
+    python -m ensurepip && \
     rm -r /usr/lib/python*/ensurepip && \
-    pip3 install --upgrade pip && \
-    pip3 install -r /tmp/requirements.pip && \
+    pip install --upgrade pip && \
+    pip install -r /tmp/requirements.pip && \
     apk del .build-deps && \
     rm -r /root/.cache
 
