@@ -21,15 +21,6 @@ RUN apk add --no-cache python3 ca-certificates openssl git openssh-client && \
     apk del .build-deps && \
     rm -r /root/.cache
 
-
-ENV WORKSPACE /workspace
-
-RUN mkdir $WORKSPACE
-
-VOLUME $WORKSPACE
-
-WORKDIR $WORKSPACE
-
 ENV SSH_PRIVATE_KEY ""
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
