@@ -3,6 +3,12 @@
 # - https://docs.gitlab.com/ee/ci/ssh_keys/
 # - https://gitlab.com/gitlab-examples/ssh-private-key/blob/master/.gitlab-ci.yml
 
+##
+## Create the SSH directory and give it the right permissions
+##
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+
 if [[ ! -z "${SSH_PRIVATE_KEY}" ]]; then
     ##
     ## Run ssh-agent (inside the build environment)
@@ -16,12 +22,6 @@ if [[ ! -z "${SSH_PRIVATE_KEY}" ]]; then
     ## https://gitlab.com/gitlab-examples/ssh-private-key/issues/1#note_48526556
     ##
     echo "$SSH_PRIVATE_KEY" | ssh-add - > /dev/null 2>&1
-
-    ##
-    ## Create the SSH directory and give it the right permissions
-    ##
-    mkdir -p ~/.ssh
-    chmod 700 ~/.ssh
 
     ##
     ## Use ssh-keyscan to scan the keys of your private server. Replace gitlab.com
@@ -45,13 +45,13 @@ if [[ ! -z "${SSH_PRIVATE_KEY}" ]]; then
     ## you will overwrite your user's SSH config.
     ##
     # [[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    
-    if [[ ! -z "${ANSIBLE_SSH_CONFIG}" ]]; then 
-        echo "$ANSIBLE_SSH_CONFIG" > ~/.ssh/config
-    else
-        echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    fi    
 fi
+
+if [[ ! -z "${ANSIBLE_SSH_CONFIG}" ]]; then 
+    echo "$ANSIBLE_SSH_CONFIG" > ~/.ssh/config
+else
+    echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+fi    
 
 if [[ ! -z "${ANSIBLE_VAULT_PASSWORD}" ]]; then 
     if [[ -z "${ANSIBLE_VAULT_PASSWORD_FILE}" ]]; then 
