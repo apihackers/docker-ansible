@@ -68,6 +68,10 @@ case $1 in
     shell)
         /bin/ash
         ;;
+    sh)
+        shift
+        /bin/ash -c "$@"
+        ;;
     *)
         ansible "$@"
         ;;
