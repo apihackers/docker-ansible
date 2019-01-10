@@ -60,19 +60,26 @@ if [[ ! -z "${ANSIBLE_VAULT_PASSWORD}" ]]; then
     echo "$ANSIBLE_VAULT_PASSWORD" > $ANSIBLE_VAULT_PASSWORD_FILE
 fi
 
-case $1 in
-    playbook)
-        shift
-        ansible-playbook "$@"
-        ;;
-    shell)
-        /bin/ash
-        ;;
-    sh)
-        shift
-        /bin/ash -c "$@"
-        ;;
-    *)
-        ansible "$@"
-        ;;
-esac
+if [[ ! -z "${CI_JOB_ID}" ]]; then
+    case $1 in
+        playbook)
+            shift
+            ansible-playbook "$@"
+            ;;
+        shell)
+            /bin/ash
+            ;;
+        sh)
+            shift
+            /bin/ash -c "$@"
+            ;;
+        *)
+            ansible "$@"
+            ;;
+    esac
+else
+    # We are in a CI pipeline
+    # Just spawn a shell for compatibility
+    /bin/ash
+fi
+
